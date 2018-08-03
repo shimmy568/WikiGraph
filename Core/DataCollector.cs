@@ -24,6 +24,7 @@ namespace WikiGraph.Core
         [Inject]
         public IWebService WebService { private get; set; }
 
+        [Inject]
         public INodeService NodeService { private get; set; }
         List<Tuple<string, string>> edges;
 
@@ -43,8 +44,7 @@ namespace WikiGraph.Core
                 var prog = new DataCollector();
                 edges = new List<Tuple<string, string>>();
 
-                //while (stack.Count().Result > 0)
-                for(var i = 0; i < 10; i++)
+                while (StackService.Count().Result > 0)
                 {
                     var url = StackService.GetUrlFromStack().Result;
 

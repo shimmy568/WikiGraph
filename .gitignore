@@ -1,0 +1,4 @@
+hello.db
+bin
+obj
+*.db-journal
