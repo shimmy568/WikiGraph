@@ -15,6 +15,7 @@ namespace WikiGraph
         public override void Load()
         {
             Bind<IDataCollector>().To<DataCollector>();
+            Bind<IDataProcesser>().To<DataProcesser>();
             BindRepositories();
             BindServices();
         }

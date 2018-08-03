@@ -78,7 +78,7 @@ namespace WikiGraph.Core
 
         public void OnExit(object sender, EventArgs e)
         {
-            Console.WriteLine("saved");
+            Console.WriteLine("saved all the good shit");
             StackService.CommitAllUrlsToDatabase().Wait();
             EdgeService.AddEdges(edges);
         }
