@@ -36,16 +36,12 @@ namespace WikiGraph.Core.Repositories
                 selectCommand.Parameters.AddWithValue("$id", id);
                 using (var reader = selectCommand.ExecuteReader())
                 {
-                    if(!await reader.ReadAsync()){
+                    if (!await reader.ReadAsync())
+                    {
                         return null;
                     }
-                    var node = new Node
-                    {
-                        NodeID = reader.GetInt32(0),
-                        Url = reader.GetString(1),
-                        Html = reader.GetString(2),
-                        TimeRetrieved = DateTime.Parse(reader.GetString(3))
-                    };
+                    
+                    var node = GetNodeFromReader(reader);
 
                     trans.Commit();
                     return node;
@@ -64,22 +60,30 @@ namespace WikiGraph.Core.Repositories
                 using (var reader = selectCommand.ExecuteReader())
                 {
                     // If there is nothing to read return null
-                    if(!await reader.ReadAsync()){
+                    if (!await reader.ReadAsync())
+                    {
                         return null;
                     }
 
-                    var node = new Node
-                    {
-                        NodeID = reader.GetInt32(0),
-                        Url = reader.GetString(1),
-                        Html = reader.GetString(2),
-                        TimeRetrieved = DateTime.Parse(reader.GetString(3))
-                    };
+                    var node = GetNodeFromReader(reader);
 
                     trans.Commit();
                     return node;
                 }
             }
+        }
+
+        /// To use this the sql data must be queried in the proper order
+        private Node GetNodeFromReader(SqliteDataReader reader)
+        {
+            var node = new Node
+            {
+                NodeID = reader.GetInt32(0),
+                Url = reader.GetString(1),
+                Html = reader.GetString(2),
+                TimeRetrieved = DateTime.Parse(reader.GetString(3))
+            };
+            return node;
         }
     }
 }

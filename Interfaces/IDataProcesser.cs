@@ -1,7 +1,9 @@
 
+using WikiGraph.Core.Enums;
+
 namespace WikiGraph.Interfaces{
     public interface IDataProcesser
     {
-        void Run();        
+        void Run(string type);        
     }
 }
