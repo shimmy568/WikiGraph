@@ -36,7 +36,7 @@ namespace WikiGraph
             else if (choice == 2)
             {
                 var kern = new KernelConfiguration(new Bindings()).BuildReadonlyKernel();
-                var mainThing = kern.Get<IDataProcesser>();
+                var mainThing = kern.Get<IDataProcessorService>();
                 var type = "";
                 if(args.Length > 1){
                     type = args[1];

@@ -5,6 +5,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using Microsoft.Data.Sqlite;
 using Ninject;
+using WikiGraph.Core.Models;
 using WikiGraph.Interfaces;
 using WikiGraph.Interfaces.Services;
 
@@ -44,7 +45,8 @@ namespace WikiGraph.Core
                 var prog = new DataCollector();
                 edges = new List<Tuple<string, string>>();
 
-                while (StackService.Count().Result > 0)
+                // while (StackService.Count().Result > 0)
+                for(var i = 0; i < 10; i++)
                 {
                     var url = StackService.GetUrlFromStack().Result;
 
@@ -54,10 +56,10 @@ namespace WikiGraph.Core
                         continue;
                     }
 
-                    NodeService.InsertNewNode(url, info.Html);
+                    NodeService.InsertNewNode(url, info.Html, info.Title);
                     foreach (var x in info.Urls)
                     {
-                        StackService.PutUrlInStack("https://en.wikipedia.org" + x).Wait();
+                        StackService.PutUrlInStack(x).Wait();
                         edges.Add(new Tuple<string, string>(url, x));
                     }
 

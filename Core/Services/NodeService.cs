@@ -25,9 +25,9 @@ namespace WikiGraph.Core.Services
             return await NodeRepository.GetNodeByUrl(url);
         }
 
-        public async Task InsertNewNode(string url, string html)
+        public async Task InsertNewNode(string url, string html, string title)
         {
-            await NodeRepository.InsertNewNode(url, html, DateTime.Now);
+            await NodeRepository.InsertNewNode(url, html, DateTime.Now, title);
         }
     }
 }

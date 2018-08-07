@@ -10,15 +10,16 @@ namespace WikiGraph.Core.Repositories
     public class NodeRepository : INodeRepository
     {
         // TODO: Create method to create node from reader to avoid code duplication
-        public async Task InsertNewNode(string url, string html, DateTime timeRetrieved)
+        public async Task InsertNewNode(string url, string html, DateTime timeRetrieved, string title)
         {
             using (var trans = DataCollector.databaseConnection.BeginTransaction())
             {
                 var insertCommand = DataCollector.databaseConnection.CreateCommand();
                 insertCommand.Transaction = trans;
-                insertCommand.CommandText = "INSERT INTO Nodes ( Url, Html, TimeRetrieved ) VALUES ( $url, $html, $time )";
+                insertCommand.CommandText = "INSERT INTO Nodes ( Url, Html, TimeRetrieved, Title ) VALUES ( $url, $html, $time, $title )";
                 insertCommand.Parameters.AddWithValue("$url", url);
                 insertCommand.Parameters.AddWithValue("$html", html);
+                insertCommand.Parameters.AddWithValue("$title", title);
                 insertCommand.Parameters.AddWithValue("$time", timeRetrieved);
                 await insertCommand.ExecuteNonQueryAsync();
 

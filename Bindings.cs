@@ -15,7 +15,6 @@ namespace WikiGraph
         public override void Load()
         {
             Bind<IDataCollector>().To<DataCollector>();
-            Bind<IDataProcesser>().To<DataProcesser>();
             BindRepositories();
             BindServices();
         }
@@ -26,6 +25,7 @@ namespace WikiGraph
             Bind<IUrlStackRepository>().To<UrlStackRepository>();
             Bind<IEdgeRepository>().To<EdgeRepository>();
             Bind<IWebRepository>().To<WebRepository>();
+            Bind<IDataProcessorRepository>().To<DataProcessorRepository>();
         }
 
         private void BindServices()
@@ -34,6 +34,7 @@ namespace WikiGraph
             Bind<IUrlStackService>().To<UrlStackService>();
             Bind<IEdgeService>().To<EdgeService>();
             Bind<IWebService>().To<WebService>();
+            Bind<IDataProcessorService>().To<DataProcessorService>();
         }
     }
 }

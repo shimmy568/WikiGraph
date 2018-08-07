@@ -8,6 +8,6 @@ namespace WikiGraph.Interfaces.Services
     {
         Task<Node> GetNodeByUrl(string url);
         Task<Node> GetNodeByID(int id);
-        Task InsertNewNode(string url, string html);
+        Task InsertNewNode(string url, string html, string title);
     }
 }

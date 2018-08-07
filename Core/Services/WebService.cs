@@ -17,22 +17,53 @@ namespace WikiGraph.Core.Services
         [Inject]
         public IWebRepository WebRepository { private get; set; }
 
+        private bool IsValidUri(string url)
+        {
+            Uri uri;
+            return Uri.TryCreate(url, UriKind.Absolute, out uri);
+        }
+
         public async Task<ScrapedInfo> GetInfoFromUrl(string url)
         {
             var htmlDoc = await WebRepository.GetHtmlDocFromUrl(url);
 
-            if(htmlDoc == null){
+            if (htmlDoc == null)
+            {
                 return null;
             }
-            
-            var urls = GetLinksFromHtmlDocument(htmlDoc);
+
+            // Get urls and filter out wikipeida: pages
+            var urls = GetLinksFromHtmlDocument(htmlDoc).Where(x => !x.Contains("Wikipedia:")).Select(x =>
+            {
+                if (x.StartsWith("/wiki/") || x.StartsWith("/w/"))
+                {
+                    return "https://en.wikipedia.org" + x;
+                }
+                else if (x.StartsWith("//"))
+                {
+                    return "https:" + x;
+                }
+                return x;
+            }).Where(x => IsValidUri(x));
             var html = htmlDoc.DocumentNode.InnerHtml;
+            var title = GetTitleFromDoc(htmlDoc);
 
             return new ScrapedInfo
             {
                 Urls = urls.ToList(),
-                Html = html
+                Html = html,
+                Title = title
             };
+        }
+
+        private string GetTitleFromDoc(HtmlDocument htmlDoc)
+        {
+            var node = htmlDoc.DocumentNode.SelectSingleNode("//h1[@id=\"firstHeading\"]");
+            if (node == null)
+            {
+                return "";
+            }
+            return node.InnerText;
         }
 
         private IEnumerable<string> GetLinksFromHtmlDocument(HtmlDocument htmlDoc)

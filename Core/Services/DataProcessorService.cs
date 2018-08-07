@@ -4,11 +4,17 @@ using WikiGraph.Interfaces;
 using System.Linq;
 using System.Collections.Generic;
 using WikiGraph.Core.Enums;
+using WikiGraph.Interfaces.Services;
+using Ninject;
+using WikiGraph.Interfaces.Repositories;
 
-namespace WikiGraph.Core
+namespace WikiGraph.Core.Services
 {
-    class DataProcesser : IDataProcesser
+    class DataProcessorService : IDataProcessorService
     {
+
+        [Inject]
+        public IDataProcessorRepository DataProcessorRepository { private get; set; }
 
         public void Run(string type)
         {
@@ -35,7 +41,7 @@ namespace WikiGraph.Core
         }
 
         private void StartMostReferencedCsv(){
-            
+            var mostReferencedList = DataProcessorRepository
         }
     }
 }

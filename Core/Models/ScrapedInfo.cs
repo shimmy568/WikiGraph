@@ -8,5 +8,6 @@ namespace WikiGraph.Core.Models
     {
         public List<string> Urls { get; set; }
         public string Html { get; set; }
+        public string Title { get; set; }
     }
 }

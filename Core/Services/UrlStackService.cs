@@ -65,6 +65,10 @@ namespace WikiGraph.Core.Services
             {
                 return false;
             }
+            else if (!url.StartsWith("https://en.wikipedia.org/wiki"))
+            {
+                return false;
+            }
 
             return true;
         }
@@ -116,12 +120,6 @@ namespace WikiGraph.Core.Services
         public async Task CommitAllUrlsToDatabase()
         {
             var tasks = new List<Task>();
-
-            // foreach (var url in AllUrlsInStack())
-            // {
-            //     tasks.Add(UrlStackRepository.AddUrlToStack(url));
-            // }
-            // await Task.WhenAll(tasks);
 
             await UrlStackRepository.AddUrlsToStack(AllUrlsInStack());
 
