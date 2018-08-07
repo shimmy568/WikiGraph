@@ -14,7 +14,7 @@ namespace WikiGraph.Core.Repositories
             {
                 var selectCommand = DataCollector.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
-                selectCommand.CommandText = "SELECT Dest, COUNT(*) total FROM Edges GROUP BY Dest ORDER BY total DESC;";
+                selectCommand.CommandText = "SELECT b.Title, Dest, COUNT(*) total FROM Edges a INNER JOIN Nodes b ON a.Dest = b.Url GROUP BY Dest ORDER BY total DESC;";
 
                 var urls = new List<string>();
                 using (var reader = selectCommand.ExecuteReader())
@@ -22,7 +22,7 @@ namespace WikiGraph.Core.Repositories
 
                     while (reader.Read())
                     {
-                        yield return new UrlCountPair(reader.GetString(0), reader.GetInt32(1));
+                        yield return new UrlCountPair(reader.GetString(0), reader.GetString(1), reader.GetInt32(2));
                     }
 
                 }

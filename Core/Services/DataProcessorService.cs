@@ -7,6 +7,7 @@ using WikiGraph.Core.Enums;
 using WikiGraph.Interfaces.Services;
 using Ninject;
 using WikiGraph.Interfaces.Repositories;
+using WikiGraph.Core.Models;
 
 namespace WikiGraph.Core.Services
 {
@@ -41,7 +42,9 @@ namespace WikiGraph.Core.Services
         }
 
         private void StartMostReferencedCsv(){
-            var mostReferencedList = DataProcessorRepository
+            var mostReferencedList = DataProcessorRepository.GetReferenceCountsForAllNodes();
+
+            var data = new List<Tuple<int, Node>>();
         }
     }
 }
