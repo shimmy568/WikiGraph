@@ -12,8 +12,9 @@ using WikiGraph.Interfaces;
 
 namespace WikiGraph
 {
-    class Program
+    class App
     {
+        public static SqliteConnection databaseConnection;
         public static void Main(string[] args)
         {
             var choice = 0;

@@ -8,6 +8,9 @@ using WikiGraph.Interfaces.Services;
 using Ninject;
 using WikiGraph.Interfaces.Repositories;
 using WikiGraph.Core.Models;
+using System.IO;
+using CsvHelper;
+using Microsoft.Data.Sqlite;
 
 namespace WikiGraph.Core.Services
 {
@@ -19,32 +22,41 @@ namespace WikiGraph.Core.Services
 
         public void Run(string type)
         {
-            DataProcessingType parsedType;
-            if (Enum.TryParse(type, out parsedType))
+            using (App.databaseConnection = new SqliteConnection("" + new SqliteConnectionStringBuilder { DataSource = "hello.db" }))
             {
-                if(parsedType == DataProcessingType.MostReferencedCsv){
-                    StartMostReferencedCsv();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Please use one of the following types for data processing: ");
-                foreach (var curType in Enum.GetNames(typeof(DataProcessingType)))
+                App.databaseConnection.Open();
+                DataProcessingType parsedType;
+                if (Enum.TryParse(type, out parsedType))
                 {
-                    if (curType == DataProcessingType.NoneSet.ToString())
+                    if (parsedType == DataProcessingType.MostReferencedCsv)
                     {
-                        continue;
+                        StartMostReferencedCsv();
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Please use one of the following types for data processing: ");
+                    foreach (var curType in Enum.GetNames(typeof(DataProcessingType)))
+                    {
+                        if (curType == DataProcessingType.NoneSet.ToString())
+                        {
+                            continue;
+                        }
 
-                    Console.WriteLine(curType);
+                        Console.WriteLine(curType);
+                    }
                 }
             }
         }
 
-        private void StartMostReferencedCsv(){
+        private void StartMostReferencedCsv()
+        {
             var mostReferencedList = DataProcessorRepository.GetReferenceCountsForAllNodes();
-
-            var data = new List<Tuple<int, Node>>();
+            using (var textWriter = File.CreateText("output.csv"))
+            {
+                var csv = new CsvWriter(textWriter);
+                csv.WriteRecords(mostReferencedList);
+            }
         }
     }
 }

@@ -14,7 +14,6 @@ namespace WikiGraph.Core
     class DataCollector: IDataCollector
     {
         HtmlWeb web;
-        public static SqliteConnection databaseConnection;
 
         [Inject]
         public IUrlStackService StackService { private get; set; }
@@ -38,9 +37,9 @@ namespace WikiGraph.Core
         {
             Console.CancelKeyPress += new ConsoleCancelEventHandler(this.OnExit);
 
-            using (databaseConnection = new SqliteConnection("" + new SqliteConnectionStringBuilder { DataSource = "hello.db" }))
+            using (App.databaseConnection = new SqliteConnection("" + new SqliteConnectionStringBuilder { DataSource = "hello.db" }))
             {
-                databaseConnection.Open();
+                App.databaseConnection.Open();
 
                 var prog = new DataCollector();
                 edges = new List<Tuple<string, string>>();

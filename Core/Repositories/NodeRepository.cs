@@ -12,9 +12,9 @@ namespace WikiGraph.Core.Repositories
         // TODO: Create method to create node from reader to avoid code duplication
         public async Task InsertNewNode(string url, string html, DateTime timeRetrieved, string title)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var insertCommand = DataCollector.databaseConnection.CreateCommand();
+                var insertCommand = App.databaseConnection.CreateCommand();
                 insertCommand.Transaction = trans;
                 insertCommand.CommandText = "INSERT INTO Nodes ( Url, Html, TimeRetrieved, Title ) VALUES ( $url, $html, $time, $title )";
                 insertCommand.Parameters.AddWithValue("$url", url);
@@ -29,9 +29,9 @@ namespace WikiGraph.Core.Repositories
 
         public async Task<Node> GetNodeByID(int id)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT rowid, Url, Html, TimeRetrieved FROM Nodes WHERE rowid = $id";
                 selectCommand.Parameters.AddWithValue("$id", id);
@@ -52,9 +52,9 @@ namespace WikiGraph.Core.Repositories
 
         public async Task<Node> GetNodeByUrl(string url)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT rowid, Url, Html, TimeRetrieved FROM Nodes WHERE Url = $url";
                 selectCommand.Parameters.AddWithValue("$url", url);

@@ -10,9 +10,9 @@ namespace WikiGraph.Core.Repositories
     {
 
         public IEnumerable<UrlCountPair> GetReferenceCountsForAllNodes(){
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT b.Title, Dest, COUNT(*) total FROM Edges a INNER JOIN Nodes b ON a.Dest = b.Url GROUP BY Dest ORDER BY total DESC;";
 

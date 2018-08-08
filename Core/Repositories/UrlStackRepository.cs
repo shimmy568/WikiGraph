@@ -10,9 +10,9 @@ namespace WikiGraph.Core.Repositories
     {
         public async Task<List<string>> GetUrlsFromStack()
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT Url FROM UrlStack ORDER BY rowid ASC LIMIT 5000;";
 
@@ -27,7 +27,7 @@ namespace WikiGraph.Core.Repositories
 
                 }
 
-                var deleteCommand = DataCollector.databaseConnection.CreateCommand();
+                var deleteCommand = App.databaseConnection.CreateCommand();
                 deleteCommand.CommandText = "DELETE FROM UrlStack WHERE Url IN (SELECT Url FROM UrlStack ORDER BY rowid ASC LIMIT 5000);";
 
                 await deleteCommand.ExecuteNonQueryAsync();
@@ -40,9 +40,9 @@ namespace WikiGraph.Core.Repositories
 
         public async Task AddUrlToStack(string url)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var insertCommand = DataCollector.databaseConnection.CreateCommand();
+                var insertCommand = App.databaseConnection.CreateCommand();
                 insertCommand.Transaction = trans;
                 insertCommand.CommandText = "INSERT INTO UrlStack ( Url ) VALUES ( $url )";
                 insertCommand.Parameters.AddWithValue("$url", url);
@@ -52,11 +52,11 @@ namespace WikiGraph.Core.Repositories
 
         public async Task AddUrlsToStack(IEnumerable<string> urls)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
                 foreach (var url in urls)
                 {
-                    var insertCommand = DataCollector.databaseConnection.CreateCommand();
+                    var insertCommand = App.databaseConnection.CreateCommand();
                     insertCommand.CommandText = "INSERT INTO UrlStack ( Url ) VALUES ( $url )";
                     insertCommand.Parameters.AddWithValue("$url", url);
                     await insertCommand.ExecuteNonQueryAsync();
@@ -67,9 +67,9 @@ namespace WikiGraph.Core.Repositories
 
         public async Task<int> CountRowsInStack()
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT COUNT(*) FROM UrlStack;";
                 using (var reader = selectCommand.ExecuteReader())
@@ -86,9 +86,9 @@ namespace WikiGraph.Core.Repositories
 
         public async Task<bool> IsUrlInDatabaseStack(string url)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT COUNT(*) FROM UrlStack WHERE Url = $url;";
                 selectCommand.Parameters.AddWithValue("$url", url);

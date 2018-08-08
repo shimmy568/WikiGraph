@@ -2,3 +2,4 @@ hello.db
 bin
 obj
 *.db-journal
+output.csv

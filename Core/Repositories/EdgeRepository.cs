@@ -12,9 +12,9 @@ namespace WikiGraph.Core.Repositories
 
         public async Task AddEgde(string sourceUrl, string destUrl)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var insertCommand = DataCollector.databaseConnection.CreateCommand();
+                var insertCommand = App.databaseConnection.CreateCommand();
                 insertCommand.Transaction = trans;
                 insertCommand.Parameters.AddWithValue("$source", sourceUrl);
                 insertCommand.Parameters.AddWithValue("$dest", destUrl);
@@ -25,11 +25,11 @@ namespace WikiGraph.Core.Repositories
 
         public async Task AddEdges(IEnumerable<Tuple<string, string>> edges)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
                 foreach (var edge in edges)
                 {
-                    var insertCommand = DataCollector.databaseConnection.CreateCommand();
+                    var insertCommand = App.databaseConnection.CreateCommand();
                     insertCommand.CommandText = "INSERT INTO Edges ( Source, Dest ) VALUES ( $source, $dest )";
                     insertCommand.Parameters.AddWithValue("$source", edge.Item1);
                     insertCommand.Parameters.AddWithValue("$dest", edge.Item2);
@@ -41,9 +41,9 @@ namespace WikiGraph.Core.Repositories
 
         public IEnumerable<Edge> GetEdgesByDestinationUrl(string url)
         {
-            using (var trans = DataCollector.databaseConnection.BeginTransaction())
+            using (var trans = App.databaseConnection.BeginTransaction())
             {
-                var selectCommand = DataCollector.databaseConnection.CreateCommand();
+                var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = "SELECT Source, Dest FROM Edges WHERE Dest = $dest;";
                 selectCommand.Parameters.AddWithValue("$dest", url);
