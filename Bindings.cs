@@ -35,6 +35,7 @@ namespace WikiGraph
             Bind<IEdgeService>().To<EdgeService>();
             Bind<IWebService>().To<WebService>();
             Bind<IDataProcessorService>().To<DataProcessorService>();
+            Bind<IDataRepairService>().To<DataRepairService>();
         }
     }
 }
