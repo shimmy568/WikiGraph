@@ -26,6 +26,7 @@ namespace WikiGraph.Core.Repositories
                     }
 
                 }
+                trans.Commit();
             }
         }
     }

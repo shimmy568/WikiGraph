@@ -26,6 +26,7 @@ namespace WikiGraph
             Bind<IEdgeRepository>().To<EdgeRepository>();
             Bind<IWebRepository>().To<WebRepository>();
             Bind<IDataProcessorRepository>().To<DataProcessorRepository>();
+            Bind<IDataRepairRepository>().To<DataRepairRepository>();
         }
 
         private void BindServices()
@@ -35,6 +36,7 @@ namespace WikiGraph
             Bind<IEdgeService>().To<EdgeService>();
             Bind<IWebService>().To<WebService>();
             Bind<IDataProcessorService>().To<DataProcessorService>();
+            Bind<IDataRepairService>().To<DataRepairService>();
             Bind<IDataRepairService>().To<DataRepairService>();
         }
     }

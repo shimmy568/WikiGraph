@@ -44,7 +44,7 @@ namespace WikiGraph.Core.Services
                     return "https:" + x;
                 }
                 return x;
-            }).Where(x => IsValidUri(x));
+            }).Where(x => IsValidUri(x)).Distinct();
             var html = htmlDoc.DocumentNode.InnerHtml;
             var title = GetTitleFromDoc(htmlDoc);
 
