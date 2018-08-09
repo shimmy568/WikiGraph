@@ -1,6 +1,6 @@
-
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Ninject;
 using WikiGraph.Core.Models;
 using WikiGraph.Interfaces.Repositories;
@@ -28,6 +28,11 @@ namespace WikiGraph.Core.Services
         public async Task InsertNewNode(string url, string html, string title)
         {
             await NodeRepository.InsertNewNode(url, html, DateTime.Now, title);
+        }
+
+        public IEnumerable<Node> GetNodesByUrls(IEnumerable<string> urls)
+        {
+            return NodeRepository.GetNodesByUrls(urls);
         }
     }
 }

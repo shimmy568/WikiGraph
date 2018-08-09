@@ -6,10 +6,11 @@ using WikiGraph.Interfaces.Repositories;
 
 namespace WikiGraph.Core.Repositories
 {
-    class DataProcessorRepository: IDataProcessorRepository
+    class DataProcessorRepository : IDataProcessorRepository
     {
 
-        public IEnumerable<UrlCountPair> GetReferenceCountsForAllNodes(){
+        public IEnumerable<UrlCountPair> GetReferenceCountsForAllNodes()
+        {
             using (var trans = App.databaseConnection.BeginTransaction())
             {
                 var selectCommand = App.databaseConnection.CreateCommand();

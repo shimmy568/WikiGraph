@@ -10,5 +10,6 @@ namespace WikiGraph.Core.Models
         public string Url { get; set; }
         public string Html { get; set; }
         public DateTime TimeRetrieved { get; set; }
+        public string Title { get; set; }
     }
 }

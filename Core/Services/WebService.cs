@@ -66,7 +66,7 @@ namespace WikiGraph.Core.Services
             return node.InnerText;
         }
 
-        private IEnumerable<string> GetLinksFromHtmlDocument(HtmlDocument htmlDoc)
+        public IEnumerable<string> GetLinksFromHtmlDocument(HtmlDocument htmlDoc)
         {
             var nodes = htmlDoc.DocumentNode.SelectNodes("//div[@class=\"mw-parser-output\"]//p//a");
 

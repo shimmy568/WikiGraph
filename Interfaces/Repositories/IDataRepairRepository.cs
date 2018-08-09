@@ -1,7 +1,11 @@
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace WikiGraph.Interfaces.Repositories{
     public interface IDataRepairRepository
     {
-        void RepairUrlStackFromEdges();
+        Task RepairUrlStackFromEdges();
+        IEnumerable<string> GetAllHtmlForNodes();
     }
 }
