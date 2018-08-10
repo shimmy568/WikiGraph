@@ -1,4 +1,7 @@
 
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using HtmlAgilityPack;
 using Ninject;
 using WikiGraph.Interfaces.Repositories;
@@ -18,6 +21,8 @@ namespace WikiGraph.Core.Services
         [Inject]
         public INodeService NodeService { private get; set; }
 
+        [Inject]
+        public IUrlStackRepository UrlStackRepository { private get; set; }
         public void Run()
         {
             DataRepairRepository.RepairUrlStackFromEdges().Wait();
@@ -31,9 +36,16 @@ namespace WikiGraph.Core.Services
 
                 var links = WebService.GetLinksFromHtmlDocument(htmlDoc);
 
-                var 
+                var newLinks = GetLinksThatDontAppearInDB(links);
+
+                UrlStackRepository.AddUrlsToStack(newLinks);
             }
         }
 
+        private IEnumerable<string> GetLinksThatDontAppearInDB(IEnumerable<string> links)
+        {
+            var urlsThatAppear = DataRepairRepository.FilterUrlsThatAppearInDatabase(links).ToDictionary(x => x);
+            return links.Where(x => !urlsThatAppear.ContainsKey(x));
+        }
     }
 }

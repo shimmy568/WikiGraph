@@ -7,5 +7,6 @@ namespace WikiGraph.Interfaces.Repositories{
     {
         Task RepairUrlStackFromEdges();
         IEnumerable<string> GetAllHtmlForNodes();
+        IEnumerable<string> FilterUrlsThatAppearInDatabase(IEnumerable<string> urls);
     }
 }

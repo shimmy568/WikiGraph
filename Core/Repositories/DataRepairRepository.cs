@@ -44,5 +44,42 @@ namespace WikiGraph.Core.Repositories
             }
         }
 
+        public IEnumerable<string> FilterUrlsThatAppearInDatabase(IEnumerable<string> urls)
+        {
+            using (var trans = App.databaseConnection.BeginTransaction())
+            {
+                var selectCommand1 = App.databaseConnection.CreateCommand();
+                selectCommand1.Transaction = trans;
+                selectCommand1.CommandText = "SELECT Url FROM Nodes WHERE Url IN $urls;";
+                selectCommand1.Parameters.AddWithValue("$urls", urls);
+
+                using (var reader = selectCommand1.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        yield return reader.GetString(0);
+                    }
+
+                }
+
+                var selectCommand2 = App.databaseConnection.CreateCommand();
+                selectCommand2.Transaction = trans;
+                selectCommand2.CommandText = "SELECT Url FROM UrlStack WHERE Url IN $urls;";
+                selectCommand2.Parameters.AddWithValue("$urls", urls);
+
+                using (var reader = selectCommand2.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        yield return reader.GetString(0);
+                    }
+
+                }
+
+                trans.Commit();
+            }
+        }
     }
 }
