@@ -5,5 +5,6 @@ namespace WikiGraph.Core.Enums
     {
         NoneSet = 0,
         MostReferencedCsv,
+        PathFinding
     }
 }

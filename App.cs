@@ -44,7 +44,7 @@ namespace WikiGraph
                 {
                     type = args[1];
                 }
-                mainThing.Run(type);
+                mainThing.Run(type, args.Skip(2));
             }
             else if (choice == 3)
             {

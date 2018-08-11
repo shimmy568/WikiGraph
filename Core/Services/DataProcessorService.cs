@@ -20,7 +20,7 @@ namespace WikiGraph.Core.Services
         [Inject]
         public IDataProcessorRepository DataProcessorRepository { private get; set; }
 
-        public void Run(string type)
+        public void Run(string type, IEnumerable<string> args)
         {
             using (App.databaseConnection = new SqliteConnection("" + new SqliteConnectionStringBuilder { DataSource = "hello.db" }))
             {
@@ -31,6 +31,18 @@ namespace WikiGraph.Core.Services
                     if (parsedType == DataProcessingType.MostReferencedCsv)
                     {
                         StartMostReferencedCsv();
+                    }
+                    else if (parsedType == DataProcessingType.PathFinding)
+                    {
+                        if(args.Count() < 2){
+                            Console.WriteLine("Please enter in which urls to go from and to in that order");
+                            return;
+                        }
+                        var l = args.ToList();
+                        var from = l[0];
+                        var to = l[1];
+
+                        var path = GetPath(from, to);
                     }
                 }
                 else
@@ -47,6 +59,11 @@ namespace WikiGraph.Core.Services
                     }
                 }
             }
+        }
+
+        private IEnumerable<string> GetPath(string from, string to)
+        {
+            throw new NotImplementedException();
         }
 
         private void StartMostReferencedCsv()
