@@ -44,8 +44,7 @@ namespace WikiGraph.Core
                 var prog = new DataCollector();
                 edges = new List<Tuple<string, string>>();
 
-                // while (StackService.Count().Result > 0)
-                for(var i = 0; i < 10; i++)
+                while (StackService.Count().Result > 0)
                 {
                     var url = StackService.GetUrlFromStack().Result;
 

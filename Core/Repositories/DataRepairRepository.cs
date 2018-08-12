@@ -1,5 +1,5 @@
 
-
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WikiGraph.Interfaces.Repositories;
@@ -16,7 +16,7 @@ namespace WikiGraph.Core.Repositories
                 var selectCommand = App.databaseConnection.CreateCommand();
                 selectCommand.Transaction = trans;
                 selectCommand.CommandText = @"INSERT INTO UrlStack (Url)
-                                              SELECT Dest FROM Edges n
+                                              SELECT DISTINCT Dest FROM Edges n
                                               WHERE n.Dest NOT IN(SELECT s.Url FROM UrlStack s WHERE n.Dest = s.Url) AND n.Dest NOT IN(SELECT s.Url FROM Nodes s WHERE n.Dest = s.Url);";
                 await selectCommand.ExecuteNonQueryAsync();
                 trans.Commit();
@@ -50,8 +50,8 @@ namespace WikiGraph.Core.Repositories
             {
                 var selectCommand1 = App.databaseConnection.CreateCommand();
                 selectCommand1.Transaction = trans;
-                selectCommand1.CommandText = "SELECT Url FROM Nodes WHERE Url IN $urls;";
-                selectCommand1.Parameters.AddWithValue("$urls", urls);
+                selectCommand1.CommandText = "SELECT Url FROM Nodes WHERE Url IN ($urls);";
+                selectCommand1.Parameters.AddWithValue("$urls", urls.ToString());
 
                 using (var reader = selectCommand1.ExecuteReader())
                 {
@@ -65,8 +65,8 @@ namespace WikiGraph.Core.Repositories
 
                 var selectCommand2 = App.databaseConnection.CreateCommand();
                 selectCommand2.Transaction = trans;
-                selectCommand2.CommandText = "SELECT Url FROM UrlStack WHERE Url IN $urls;";
-                selectCommand2.Parameters.AddWithValue("$urls", urls);
+                selectCommand2.CommandText = "SELECT Url FROM UrlStack WHERE Url IN ($urls);";
+                selectCommand2.Parameters.AddWithValue("$urls", urls.ToString());
 
                 using (var reader = selectCommand2.ExecuteReader())
                 {

@@ -6,6 +6,7 @@ using HtmlAgilityPack;
 using Ninject;
 using WikiGraph.Interfaces.Repositories;
 using WikiGraph.Interfaces.Services;
+using Microsoft.Data.Sqlite;
 
 namespace WikiGraph.Core.Services
 {
@@ -25,20 +26,25 @@ namespace WikiGraph.Core.Services
         public IUrlStackRepository UrlStackRepository { private get; set; }
         public void Run()
         {
-            DataRepairRepository.RepairUrlStackFromEdges().Wait();
-
-            var allHtml = DataRepairRepository.GetAllHtmlForNodes();
-
-            foreach (var html in allHtml)
+            using (App.databaseConnection = new SqliteConnection("" + new SqliteConnectionStringBuilder { DataSource = "hello.db" }))
             {
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(html);
+                App.databaseConnection.Open();
 
-                var links = WebService.GetLinksFromHtmlDocument(htmlDoc);
+                DataRepairRepository.RepairUrlStackFromEdges().Wait();
 
-                var newLinks = GetLinksThatDontAppearInDB(links);
+                var allHtml = DataRepairRepository.GetAllHtmlForNodes().ToList();
 
-                UrlStackRepository.AddUrlsToStack(newLinks);
+                foreach (var html in allHtml)
+                {
+                    var htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(html);
+
+                    var links = WebService.GetLinksFromHtmlDocument(htmlDoc);
+
+                    var newLinks = GetLinksThatDontAppearInDB(links);
+
+                    UrlStackRepository.AddUrlsToStack(newLinks);
+                }
             }
         }
 
