@@ -32,7 +32,7 @@ namespace WikiGraph.Core.Services
 
                 DataRepairRepository.RepairUrlStackFromEdges().Wait();
 
-                var allHtml = DataRepairRepository.GetAllHtmlForNodes().ToList();
+                var allHtml = DataRepairRepository.GetAllHtmlForNodes();
 
                 foreach (var html in allHtml)
                 {

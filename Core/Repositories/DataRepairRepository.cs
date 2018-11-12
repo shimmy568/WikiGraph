@@ -25,6 +25,21 @@ namespace WikiGraph.Core.Repositories
 
         public IEnumerable<string> GetAllHtmlForNodes()
         {
+            long count;
+            using (var trans = App.databaseConnection.BeginTransaction())
+            {
+                var selectCommand = App.databaseConnection.CreateCommand();
+                selectCommand.Transaction = trans;
+                selectCommand.CommandText = "SELECT COUNT(*) FROM Nodes";
+                using (var reader = selectCommand.ExecuteReader())
+                {
+                    reader.Read();
+
+                    count = reader.GetInt64(0);
+                    trans.Commit();
+                }
+            }
+
             using (var trans = App.databaseConnection.BeginTransaction())
             {
                 var selectCommand = App.databaseConnection.CreateCommand();
